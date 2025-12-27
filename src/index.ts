@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import { connectMongoDB } from './config/mongo.config';
 import { setupSwagger } from './config/swagger.config';
-import authRouter from './routers/auth/auth.route';
+import authRouter from './routers/auth.route';
+import vendorRouter from './routers/vendor.route';
+import categoryRouter from './routers/category.route';
 
 
 dotenv.config({
@@ -16,6 +18,8 @@ setupSwagger(app);
 
 // app.use('/horoscope', horoscopeRouter);
 app.use('/auth', authRouter);
+app.use('/vendors', vendorRouter);
+app.use('/categories', categoryRouter);
 
 (async () => {
     await connectMongoDB();
