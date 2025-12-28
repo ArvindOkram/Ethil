@@ -17,6 +17,12 @@ const estimateItemSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Vendor",
             required: true,
+        },
+        
+        vendorName: {
+            type: String,
+            required: false,
+            default: null
         }
     }
 );
@@ -37,11 +43,6 @@ const estimateHistorySchema = new Schema(
         totalEstimate: {
             type: Number,
             required: true,
-        },
-
-        createdAt: {
-            type: Date,
-            default: Date.now,
         },
     },
     {

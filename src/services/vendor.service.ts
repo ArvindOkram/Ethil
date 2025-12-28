@@ -1,11 +1,5 @@
 import { createVendorDTO } from "../commons/interface/vendor.interface";
-import {
-  createVendor,
-  deleteVendorById,
-  findAllVendors,
-  findVendorById,
-  updateVendorById,
-} from "../repositories/vendor.respository";
+import vendorRepsitory from "../repositories/vendor.respository";
 
 /**
  * Add a new vendor
@@ -16,7 +10,7 @@ const addVendor = async (vendorData: createVendorDTO) => {
       throw new Error("Vendor name and category are required");
     }
   
-    return createVendor(vendorData);
+    return vendorRepsitory.createVendor(vendorData);
   } catch (error) {
     throw new Error("Error validating vendor data");
   }
@@ -26,20 +20,20 @@ const addVendor = async (vendorData: createVendorDTO) => {
  * Get all vendors
  */
 const getVendors = async () => {
-  return findAllVendors();
+  return vendorRepsitory.findAllVendors();
 };
 
 /**
  * Remove vendor by ID
  */
 const removeVendor = async (vendorId: string) => {
-  const vendor = await findVendorById(vendorId);
+  const vendor = await vendorRepsitory.findVendorById(vendorId);
 
   if (!vendor) {
     throw new Error("Vendor not found");
   }
 
-  await deleteVendorById(vendorId);
+  await vendorRepsitory.deleteVendorById(vendorId);
   return { success: true };
 };
 
@@ -54,7 +48,7 @@ const updateVendorDetails = async (
     description: string;
   }>
 ) => {
-  const updatedVendor = await updateVendorById(vendorId, updateData);
+  const updatedVendor = await vendorRepsitory.updateVendorById(vendorId, updateData);
 
   if (!updatedVendor) {
     throw new Error("Vendor not found or update failed");

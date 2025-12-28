@@ -3,7 +3,7 @@ import { VendorModel } from "../schema/vendor.schema";
 import { createVendorDTO } from "../commons/interface/vendor.interface";
 
 // CREATE
-export const createVendor = async (data: createVendorDTO) => {
+ const createVendor = async (data: createVendorDTO) => {
   return VendorModel.create({
     ...data,
     category: new Types.ObjectId(data.category),
@@ -11,13 +11,13 @@ export const createVendor = async (data: createVendorDTO) => {
 };
 
 // READ - all vendors
-export const findAllVendors = async () => {
+ const findAllVendors = async () => {
   return VendorModel.find()
     .populate("category", "name", "description")
     .lean();
 };
 
-export const findVendorsByCategory = async (categoryId: string) => {
+ const findVendorsByCategory = async (categoryId: string) => {
   if (!Types.ObjectId.isValid(categoryId)) return [];
 
   return VendorModel.find({
@@ -28,7 +28,7 @@ export const findVendorsByCategory = async (categoryId: string) => {
 };
 
 // READ - by id
-export const findVendorById = async (vendorId: string) => {
+ const findVendorById = async (vendorId: string) => {
   if (!Types.ObjectId.isValid(vendorId)) return null;
 
   return VendorModel.findById(vendorId)
@@ -37,7 +37,7 @@ export const findVendorById = async (vendorId: string) => {
 };
 
 // UPDATE
-export const updateVendorById = async (
+ const updateVendorById = async (
   vendorId: string,
   updateData: Partial<{
     name: string;
@@ -63,8 +63,26 @@ export const updateVendorById = async (
 };
 
 // DELETE
-export const deleteVendorById = async (vendorId: string) => {
+ const deleteVendorById = async (vendorId: string) => {
   if (!Types.ObjectId.isValid(vendorId)) return null;
 
   return VendorModel.findByIdAndDelete(vendorId);
 };
+
+const getVendorsByIds = async (vendorIds: string[]) => {
+  try {
+    return VendorModel.find({ _id: { $in: vendorIds } }).lean();
+  } catch (error) {
+    throw new Error("Error fetching vendors by IDs");
+  }
+}
+
+export default {
+  createVendor,
+  findAllVendors,
+  findVendorsByCategory,
+  findVendorById,
+  updateVendorById,
+  deleteVendorById,
+  getVendorsByIds
+}
